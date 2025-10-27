@@ -1,0 +1,14 @@
+# Replace placeholder teams with the actual owners once roles are assigned.
+# Syntax: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Frontend workspace (React)
+/client/**    @replace-with-frontend-team
+
+# Backend workspace (Express API)
+/server/**    @replace-with-backend-team
+
+# Documentation and governance
+/docs/**      @replace-with-docs-team
+
+# Default fallback
+*             @replace-with-core-maintainers
