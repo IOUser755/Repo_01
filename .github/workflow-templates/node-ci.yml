@@ -1,0 +1,52 @@
+# Template: Node CI workflow
+# Use this reusable template in repositories with a package.json to run linting, type checks, and tests.
+name: Node CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect Node workspace
+        id: detect
+        run: |
+          if [ -f package.json ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "Detected package.json" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No package.json detected; skipping Node tasks." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Setup Node.js (LTS)
+        if: steps.detect.outputs.found == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.detect.outputs.found == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.detect.outputs.found == 'true'
+        run: npm run lint --if-present
+
+      - name: Type check
+        if: steps.detect.outputs.found == 'true'
+        run: npm run typecheck --if-present
+
+      - name: Test
+        if: steps.detect.outputs.found == 'true'
+        run: npm test --if-present

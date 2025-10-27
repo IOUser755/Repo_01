@@ -1,0 +1,44 @@
+# Template: Go CI workflow
+# Use this template for repositories with Go modules to vet and test packages.
+name: Go CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect Go module
+        id: detect
+        run: |
+          if [ -f go.mod ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "Detected go.mod" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No go.mod detected; skipping Go tasks." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Setup Go
+        if: steps.detect.outputs.found == 'true'
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+          cache: true
+
+      - name: Vet
+        if: steps.detect.outputs.found == 'true'
+        run: go vet ./...
+
+      - name: Test
+        if: steps.detect.outputs.found == 'true'
+        run: go test ./...

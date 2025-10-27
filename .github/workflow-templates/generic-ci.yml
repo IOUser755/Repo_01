@@ -1,0 +1,35 @@
+# Template: Generic discovery workflow
+# Use this template for documentation-first repositories that need a graceful CI no-op with language detection output.
+name: Generic CI Discovery
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect common ecosystems
+        run: |
+          summary=""
+          if [ -f package.json ]; then
+            summary+="- Detected Node project (package.json)\n"
+          fi
+          if [ -f pyproject.toml ] || [ -n "$(git ls-files '*.py')" ]; then
+            summary+="- Detected Python sources\n"
+          fi
+          if [ -f go.mod ]; then
+            summary+="- Detected Go module (go.mod)\n"
+          fi
+          if [ -z "$summary" ]; then
+            summary="- No Node, Python, or Go tooling detected."
+          fi
+          echo "$summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "Generic CI completed. Copy a language-specific template from .github/workflow-templates when ready." >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,83 @@
+# Template: Python CI workflow
+# Use this template for repositories with Python sources to run linting and tests when available.
+name: Python CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect Python workspace
+        id: detect
+        run: |
+          if [ -n "$(git ls-files '*.py')" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+            echo "Detected Python files" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No Python files detected; skipping Python tasks." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Setup Python
+        if: steps.detect.outputs.found == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+          cache-dependency-path: |
+            requirements*.txt
+            **/requirements*.txt
+            pyproject.toml
+
+      - name: Install dependencies
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt || true
+          fi
+          if compgen -G "requirements/*.txt" > /dev/null; then
+            for file in requirements/*.txt; do
+              pip install -r "$file" || true
+            done
+          fi
+          if [ -f pyproject.toml ]; then
+            pip install . || true
+          fi
+
+      - name: Lint with Ruff (if available)
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          if python -m pip show ruff >/dev/null 2>&1; then
+            ruff check .
+          else
+            echo "Ruff not installed; skipping" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Lint with Flake8 (if available)
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          if python -m pip show flake8 >/dev/null 2>&1; then
+            flake8
+          else
+            echo "Flake8 not installed; skipping" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Test with pytest (if available)
+        if: steps.detect.outputs.found == 'true'
+        run: |
+          if python -m pip show pytest >/dev/null 2>&1; then
+            pytest
+          else
+            echo "Pytest not installed; skipping" >> "$GITHUB_STEP_SUMMARY"
+          fi
