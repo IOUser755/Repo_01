@@ -1,0 +1,19 @@
+# Template: Dependency review
+# Use this template to block risky dependency changes on pull requests.
+name: Dependency Review
+
+on:
+  pull_request:
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: critical
+          comment-summary: true
