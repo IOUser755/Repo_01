@@ -1,6 +1,0 @@
-# Default reviewers for organization repositories
-/client/**      @org/frontend
-/server/**      @org/backend
-/infra/**       @org/devops
-/docs/**        @org/tech-writers
-*               @org/security

@@ -1,0 +1,58 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  node-workspaces:
+    name: Node workspace checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          set -e
+          found=0
+          for dir in . client server; do
+            if [ -f "$dir/package.json" ]; then
+              found=1
+              echo "::group::Install ($dir)"
+              if [ -f "$dir/package-lock.json" ]; then
+                (cd "$dir" && npm ci)
+              else
+                (cd "$dir" && npm install)
+              fi
+              echo "::endgroup::"
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "No Node.js workspaces detected; skipping install"
+          fi
+
+      - name: Run lint, test, and typecheck
+        run: |
+          set -e
+          found=0
+          for dir in . client server; do
+            if [ -f "$dir/package.json" ]; then
+              found=1
+              echo "::group::Checks ($dir)"
+              (cd "$dir" && npm run lint --if-present)
+              (cd "$dir" && npm run test --if-present)
+              (cd "$dir" && npm run typecheck --if-present)
+              echo "::endgroup::"
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "No Node.js workspaces detected; skipping checks"
+          fi

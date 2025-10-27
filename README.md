@@ -1,84 +1,36 @@
-# Repo_01
+# AP2_01
 
-This repository hosts shared GitHub defaults for the organization. Review the governance docs and automation templates below before onboarding a new project.
+AP2_01 bootstraps a MongoDB, Express, React, and Node.js (MERN) application using the organization foundation repo as its baseline. The project reuses the shared automation, documentation, and governance playbooks so contributors can focus on shipping product value quickly.
 
-## Organization policies
+## Project overview
 
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Security policy](SECURITY.md)
-- [Support policy](SUPPORT.md)
-- [Contributing guide](CONTRIBUTING.md)
-- [AI operating manual](docs/ai/codex-operating-manual.md)
-- [Copilot & AI instructions](.github/copilot-instructions.md)
+- **Stack**: React front end with Tailwind CSS, Express/Node.js API, and MongoDB Atlas.
+- **Status**: Fresh scaffold copied from the [`template-mern`](https://github.com/IOUser755/template-mern) starter.
+- **Governance**: Aligns with the organization-wide defaults published in the [foundation repo](https://github.com/IOUser755/Repo_01).
 
-All documents are cross-linked so humans and automated contributors can rediscover them quickly.
+## Getting started
 
-## Workflow templates
+1. Install the Node.js version defined in `.nvmrc` (see the template repository) and run `npm install` in both `client/` and `server/` directories.
+2. Copy `.env.example` to `.env` for each workspace and fill in service URLs, MongoDB connection strings, and API secrets.
+3. Start local services:
+   - `npm run dev` inside `client/` to launch Vite + Tailwind.
+   - `npm run dev` inside `server/` to run the Express API with hot reload.
+4. Run `npm run lint`, `npm run test`, and `npm run typecheck` in each workspace before submitting pull requests.
 
-Reusable workflow templates live under [`.github/workflow-templates/`](.github/workflow-templates/):
+## Documentation
 
-- [`node-ci.yml`](.github/workflow-templates/node-ci.yml) – Node.js linting and tests when a `package.json` is present.
-- [`python-ci.yml`](.github/workflow-templates/python-ci.yml) – Python linting and testing with Ruff, Flake8, and Pytest when available.
-- [`go-ci.yml`](.github/workflow-templates/go-ci.yml) – Go vet and test jobs for Go modules.
-- [`generic-ci.yml`](.github/workflow-templates/generic-ci.yml) – No-op workflow that documents detected languages.
-- [`codeql-analysis.yml`](.github/workflow-templates/codeql-analysis.yml) – CodeQL scans for JavaScript/TypeScript, Python, and Go.
-- [`dependency-review.yml`](.github/workflow-templates/dependency-review.yml) – Dependency review checks on pull requests.
-- [`release-drafter.yml`](.github/workflow-templates/release-drafter.yml) – Release Drafter automation; pair with the release config below.
+- Architecture notes live in [ARCHITECTURE.md](ARCHITECTURE.md).
+- Contribution guidance is captured in [CONTRIBUTING.md](CONTRIBUTING.md).
+- Architecture Decision Records (ADRs) reside in [`docs/adr/`](docs/adr/) using the shared template.
+- Agent playbooks, Codex prompts, and automation checklists are available under [`docs/ai/`](docs/ai/).
 
-## Release automation
+## Automation
 
-Release note defaults live in [`.github/release-drafter.yml`](.github/release-drafter.yml). Dependabot defaults live in [`.github/dependabot.yml`](.github/dependabot.yml) and the org-level [dependabot.yml](dependabot.yml).
+- Continuous integration is configured via [`.github/workflows/ci.yml`](.github/workflows/ci.yml) and automatically detects Node.js projects.
+- Dependency updates arrive weekly through [`.github/dependabot.yml`](.github/dependabot.yml).
 
-## Pushing these templates to GitHub
+### Follow-ups
 
-Use the commands below to publish the branch that contains these assets. Choose the path that matches the repository you are targeting.
-
-### Push to this repository (`Repo_01`)
-
-```bash
-# Initialize if you cloned without history
-git init
-git add .
-git commit -m "Initial commit"
-
-# Ensure the main branch exists locally
-git branch -M main
-
-# Point to the Repo_01 remote (use SSH if you prefer)
-git remote add origin https://github.com/IOUser755/Repo_01.git
-
-# Confirm the remote URL
-git remote -v
-
-# Publish the default branch
-git push -u origin main
-
-# Optional: publish the feature branch that carries these templates
-git checkout -b work
-git push -u origin work
-```
-
-### Push to an organization-level `.github` repository
-
-```bash
-git clone https://github.com/<org>/.github.git
-cd .github
-
-# Copy or create the templates in workflow-templates/
-mkdir -p workflow-templates
-
-# Stage, commit, and push the updates
-git add .
-git commit -m "Add workflow templates and defaults"
-git push
-```
-
-### Adjust an existing remote
-
-If the remote already exists but points elsewhere, update it instead of adding a new one:
-
-```bash
-git remote set-url origin https://github.com/IOUser755/Repo_01.git
-```
-
-You can also keep multiple remotes (for example, `origin` for `Repo_01` and `upstream` for the org-level `.github` repository) if you need to push to both locations.
+- [ ] Enable branch protection on `main`.
+- [ ] Map placeholders in `.github/CODEOWNERS` to real teams.
+- [ ] Provision dev, staging, and production environments.

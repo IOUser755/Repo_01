@@ -1,42 +1,35 @@
-# Contributing Guide
+# Contributing to AP2_01
 
-Thank you for helping us improve our projects! This guide explains how to get started, how we work, and which standards keep our repositories healthy.
+Thanks for investing time in AP2_01. This document captures the minimum workflow required to keep the MERN stack healthy while the project is in its bootstrap phase. For expanded governance policies, reference the shared [foundation repo](https://github.com/IOUser755/Repo_01).
 
-## Before You Start
+## Development workflow
 
-1. Review the [Code of Conduct](CODE_OF_CONDUCT.md). We expect everyone to uphold it in all interactions.
-2. Read our [Support policy](SUPPORT.md) to understand how we triage issues and feature requests.
-3. Familiarize yourself with the [AI operating manual](docs/ai/codex-operating-manual.md) and [.github/copilot instructions](.github/copilot-instructions.md) so automated agents stay aligned with human processes.
+1. Create a feature branch from `main` using a descriptive name (e.g., `feature/auth-api`).
+2. Keep pull requests focused and under 400 changed lines whenever possible.
+3. Ensure commits are signed or otherwise attributable per organization policy.
 
-## Getting Set Up
+## Required checks
 
-- Fork the repository or clone it if you have write access.
-- Install dependencies as described in the project `README.md`.
-- Create a feature branch (`git checkout -b feature/your-change`). Prefer small, reviewable pull requests (≤ 800 lines changed).
+Run the following scripts locally before pushing:
 
-## Development Workflow
+- `npm run lint` in both `client/` and `server/`
+- `npm run test` in both workspaces
+- `npm run typecheck` in both workspaces (or `tsc --noEmit` if available)
 
-1. Make changes with clear, well-tested commits. Update documentation alongside code changes.
-2. Run the relevant CI tasks locally (lint, type-check, tests) before opening a PR. Our reusable workflows in [.github/workflow-templates/](.github/workflow-templates/) outline the expected checks.
-3. Follow the repository’s coding standards. When in doubt, match the surrounding code.
+The CI workflow mirrors these commands. Fix issues locally before requesting review to keep the pipeline green.
 
-## Pull Requests
+## Documentation and ADRs
 
-- Use the [pull request template](.github/PULL_REQUEST_TEMPLATE.md) to summarize your changes, rationale, and testing.
-- Reference related issues and link to documentation updates.
-- Request review from the appropriate owners listed in [CODEOWNERS](CODEOWNERS).
-- Keep discussions public when possible so future contributors can learn from the history.
+- Update [ARCHITECTURE.md](ARCHITECTURE.md) when altering system boundaries or integration patterns.
+- Capture significant technical decisions in [`docs/adr/`](docs/adr/) using the provided template.
+- Agent playbooks live under [`docs/ai/`](docs/ai/); refresh them when workflows change so AI collaborators stay aligned.
 
-## Issue Management
+## Pull request expectations
 
-- Choose the right issue template from [.github/ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/) to provide consistent context.
-- Label issues accurately so they reach the correct maintainers.
-- For security concerns, follow [SECURITY.md](SECURITY.md) instead of opening a public issue.
+- Fill out the PR template completely, including risk assessment and test evidence.
+- Request reviews from the appropriate owners listed in `.github/CODEOWNERS` once those mappings are finalized.
+- Use draft pull requests for work-in-progress changes to avoid premature reviews.
 
-## Release Cadence
+## Community conduct
 
-We rely on automation to keep dependencies and release notes current. Refer to [dependabot.yml](dependabot.yml) and [.github/workflow-templates/release-drafter.yml](.github/workflow-templates/release-drafter.yml) for defaults you can adopt in project repositories.
-
-## Questions?
-
-If you are unsure about anything, open a discussion or contact the maintainers as outlined in [SUPPORT.md](SUPPORT.md). We appreciate your contributions!
+This project follows the organization's [Code of Conduct](CODE_OF_CONDUCT.md). Report incidents through the established internal channels.
