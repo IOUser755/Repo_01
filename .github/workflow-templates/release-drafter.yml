@@ -1,0 +1,20 @@
+# Template: Release Drafter automation
+# Use this template to maintain running release notes that categorize merged pull requests.
+name: Release Drafter
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml

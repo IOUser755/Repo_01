@@ -1,0 +1,44 @@
+name: "Tech debt"
+description: "Track refactors or maintenance work"
+labels:
+  - tech-debt
+title: "[Tech Debt]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to capture maintenance and cleanup tasks. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for workflow expectations.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      placeholder: "Refactor the authentication helper..."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: "Why is this debt worth addressing now?"
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: "List components, services, or files involved."
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks / mitigation
+  - type: textarea
+    id: followup
+    attributes:
+      label: Definition of done
+      description: "How will we know this debt is resolved?"
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: "This work aligns with the Code of Conduct."
+          required: true
+        - label: "Automation impacts have been considered (CI, alerts, docs)."

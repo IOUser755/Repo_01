@@ -1,0 +1,46 @@
+name: "Feature request"
+description: "Suggest an idea that solves a user problem"
+labels:
+  - enhancement
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! Review [SUPPORT.md](../../SUPPORT.md) for response expectations and link any relevant docs.
+  - type: input
+    id: problem
+    attributes:
+      label: Problem statement
+      description: "What user problem are we solving?"
+      placeholder: "Users need... because..."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: "Describe the feature or change."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Success criteria / metrics
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies / risks
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: "I have reviewed the Code of Conduct."
+          required: true
+        - label: "I have checked existing issues and discussions."
+          required: true
